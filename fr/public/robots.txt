@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Block private/auth pages from indexing
+Disallow: /journalist-dashboard
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://worldnewsnow.vercel.app/sitemap.xml

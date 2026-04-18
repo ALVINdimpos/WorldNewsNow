@@ -50,6 +50,7 @@ app.use('/api/articles', require('./routes/articles'));
 app.use('/api/comments', require('./routes/comments'));
 app.use('/api/journalists', require('./routes/journalists'));
 app.use('/api/contact', require('./routes/contact'));
+app.use('/', require('./routes/sitemap'));
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'WorldNewsNow API is running', env: process.env.NODE_ENV });

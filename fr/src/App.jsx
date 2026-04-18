@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CATS } from './data/constants';
 import './styles/global.css';
 
+import { SEO }          from './components/SEO';
 import { Header }       from './components/Header';
 import { Footer }       from './components/Footer';
 import { ArticleCard, FeaturedArticle } from './components/ArticleCard';
@@ -167,17 +168,24 @@ export default function WorldNewsNow() {
         <div style={{ flex: 1, width: '100%', maxWidth: 1200, margin: '0 auto',
           padding: '0 24px 80px', position: 'relative', zIndex: 1, boxSizing: 'border-box' }}>
 
-          {currentPage === 'about'       ? <AboutPage       goHome={goHome} setAuthView={setAuthView} /> :
-           currentPage === 'journalists' ? <JournalistsPage goHome={goHome} /> :
-           currentPage === 'advertise'   ? <AdvertisePage   goHome={goHome} /> :
-           currentPage === 'careers'     ? <CareersPage     goHome={goHome} setAuthView={setAuthView} /> :
-           currentPage === 'journalist-dashboard' ? (
+          {currentPage === 'about' ? (
+             <><SEO page="about" /><AboutPage goHome={goHome} setAuthView={setAuthView} /></>
+           ) : currentPage === 'journalists' ? (
+             <><SEO page="journalists" /><JournalistsPage goHome={goHome} /></>
+           ) : currentPage === 'advertise' ? (
+             <><SEO page="advertise" /><AdvertisePage goHome={goHome} /></>
+           ) : currentPage === 'careers' ? (
+             <><SEO page="careers" /><CareersPage goHome={goHome} setAuthView={setAuthView} /></>
+           ) : currentPage === 'journalist-dashboard' ? (
              currentUser?.role === 'journalist'
                ? <JournalistDashboard currentUser={currentUser} goHome={goHome} />
                : <>{goHome()}</>
-           ) :
-           !selectedId ? (
+           ) : !selectedId ? (
              <>
+               <SEO
+                 page={activeCat !== 'ALL' ? 'category' : 'home'}
+                 category={activeCat !== 'ALL' ? activeCat : undefined}
+               />
                {loadingArticles && (
                  <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)',
                    fontFamily: "'DM Mono',monospace", fontSize: 13, letterSpacing: 1 }}>
@@ -228,6 +236,7 @@ export default function WorldNewsNow() {
                Loading article…
              </div>
            ) : selected ? (
+             <><SEO article={selected} />
              <ArticleDetail
                article={{ ...selected, comments }}
                onBack={goHome}
@@ -248,7 +257,7 @@ export default function WorldNewsNow() {
                onPostComment={postComment}
                currentUser={currentUser}
                setAuthView={setAuthView}
-             />
+             /></>
            ) : null}
         </div>
 
