@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CATS } from './data/constants';
 import './styles/global.css';
@@ -15,7 +15,7 @@ import { CareersPage }  from './components/CareersPage';
 import { JournalistDashboard } from './components/JournalistDashboard';
 import { AuthModal }    from './components/AuthModal';
 
-import { selectCurrentUser } from './store/authSlice';
+import { selectCurrentUser, selectCurrentToken } from './store/authSlice';
 import { setCredentials, clearCredentials } from './store/authSlice';
 import { useGetArticlesQuery, useGetArticleQuery, useLikeArticleMutation } from './store/articlesApi';
 import { useGetCommentsQuery, useCreateCommentMutation, useLikeCommentMutation } from './store/commentsApi';
@@ -24,11 +24,12 @@ import { useLoginMutation, useRegisterMutation, useLogoutMutation } from './stor
 export default function WorldNewsNow() {
   const dispatch   = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
+  const currentToken = useSelector(selectCurrentToken);
 
   const [activeCat,    setActiveCat]   = useState('ALL');
   const [selectedId,   setSelectedId]  = useState(null);
   const [authView,     setAuthView]    = useState(null);
-  const [authForm,     setAuthForm]    = useState({ name: '', email: '', pass: '', role: 'user' });
+  const [authForm,     setAuthForm]    = useState({ name: '', email: '', pass: '', role: 'reader' });
   const [likedArts,    setLikedArts]   = useState(new Set());
   const [likedComs,    setLikedComs]   = useState(new Set());
   const [commentText,  setCommentText] = useState('');
@@ -40,6 +41,13 @@ export default function WorldNewsNow() {
   const [showPass,     setShowPass]    = useState(false);
   const [authError,    setAuthError]   = useState('');
 
+  useEffect(() => {
+    if (authView) {
+      setAuthForm({ name: '', email: '', pass: '', role: 'reader' });
+      setAuthError('');
+    }
+  }, [authView]);
+
   // ── API hooks ──────────────────────────────────────────────────────────────
   const { data: articlesData, isLoading: loadingArticles } =
     useGetArticlesQuery({ category: activeCat });
@@ -47,12 +55,12 @@ export default function WorldNewsNow() {
   const { data: articleData, isLoading: loadingArticle } =
     useGetArticleQuery(selectedId, { skip: !selectedId });
 
-  const [likeArticleMutation] = useLikeArticleMutation();
-  const [createComment]       = useCreateCommentMutation();
-  const [likeCommentMutation] = useLikeCommentMutation();
-  const [loginMutation]       = useLoginMutation();
-  const [registerMutation]    = useRegisterMutation();
-  const [logoutMutation]      = useLogoutMutation();
+  const [likeArticleMutation]                      = useLikeArticleMutation();
+  const [createComment, { isLoading: isPosting }]  = useCreateCommentMutation();
+  const [likeCommentMutation]                      = useLikeCommentMutation();
+  const [loginMutation,    { isLoading: loginLoading }]    = useLoginMutation();
+  const [registerMutation, { isLoading: registerLoading }] = useRegisterMutation();
+  const [logoutMutation,   { isLoading: logoutLoading }]   = useLogoutMutation();
 
   // ── Derived data ───────────────────────────────────────────────────────────
   const articles    = articlesData?.articles || [];
@@ -61,10 +69,16 @@ export default function WorldNewsNow() {
   const selected    = articleData?.article || null;
   const comments    = articleData?.comments || [];
 
+  function requireAuth() {
+    if (currentUser && currentToken) return true;
+    setAuthView('login');
+    return false;
+  }
+
   // ── Handlers ───────────────────────────────────────────────────────────────
   async function likeArticle(id, e) {
     e?.stopPropagation();
-    if (!currentUser) { setAuthView('signup'); return; }
+    if (!requireAuth()) return;
     const was = likedArts.has(id);
     setLikedArts((s) => { const n = new Set(s); was ? n.delete(id) : n.add(id); return n; });
     try {
@@ -75,7 +89,7 @@ export default function WorldNewsNow() {
   }
 
   async function likeComment(articleId, cid) {
-    if (!currentUser) { setAuthView('signup'); return; }
+    if (!requireAuth()) return;
     const was = likedComs.has(cid);
     setLikedComs((s) => { const n = new Set(s); was ? n.delete(cid) : n.add(cid); return n; });
     try {
@@ -87,7 +101,7 @@ export default function WorldNewsNow() {
 
   async function postComment() {
     if (!commentText.trim()) return;
-    if (!currentUser) { setAuthView('signup'); return; }
+    if (!requireAuth()) return;
     try {
       await createComment({ text: commentText.trim(), articleId: selectedId }).unwrap();
       setCommentText('');
@@ -98,7 +112,7 @@ export default function WorldNewsNow() {
 
   async function postReply(parentId) {
     if (!replyText.trim()) return;
-    if (!currentUser) { setAuthView('signup'); return; }
+    if (!requireAuth()) return;
     try {
       await createComment({ text: replyText.trim(), articleId: selectedId, parentId }).unwrap();
       setReplyText('');
@@ -125,7 +139,7 @@ export default function WorldNewsNow() {
         }).unwrap();
       }
       setAuthView(null);
-      setAuthForm({ name: '', email: '', pass: '', role: 'user' });
+      setAuthForm({ name: '', email: '', pass: '', role: 'reader' });
     } catch (err) {
       setAuthError(err?.data?.message || 'Authentication failed. Please try again.');
     }
@@ -187,8 +201,8 @@ export default function WorldNewsNow() {
                  category={activeCat !== 'ALL' ? activeCat : undefined}
                />
                {loadingArticles && (
-                 <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--muted)',
-                   fontFamily: "'DM Mono',monospace", fontSize: 13, letterSpacing: 1 }}>
+                 <div className="page-loader">
+                   <span className="spinner spinner-lg" />
                    Loading stories…
                  </div>
                )}
@@ -231,8 +245,8 @@ export default function WorldNewsNow() {
                )}
              </>
            ) : loadingArticle ? (
-             <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--muted)',
-               fontFamily: "'DM Mono',monospace", fontSize: 13, letterSpacing: 1 }}>
+             <div className="page-loader" style={{padding:'80px 0'}}>
+               <span className="spinner spinner-lg" />
                Loading article…
              </div>
            ) : selected ? (
@@ -255,6 +269,7 @@ export default function WorldNewsNow() {
                commentText={commentText}
                setCommentText={setCommentText}
                onPostComment={postComment}
+               isPosting={isPosting}
                currentUser={currentUser}
                setAuthView={setAuthView}
              /></>
@@ -270,6 +285,8 @@ export default function WorldNewsNow() {
         authForm={authForm}
         setAuthForm={setAuthForm}
         handleAuth={handleAuth}
+        isLoading={loginLoading || registerLoading}
+        logoutLoading={logoutLoading}
         showPass={showPass}
         setShowPass={setShowPass}
         authError={authError}

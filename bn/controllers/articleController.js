@@ -56,6 +56,7 @@ exports.getArticle = async (req, res, next) => {
     }
 
     await Article.findByIdAndUpdate(req.params.id, { $inc: { viewCount: 1 } });
+    article.viewCount = (article.viewCount || 0) + 1;
 
     const comments = await Comment.find({ article: req.params.id, parent: null, isDeleted: false })
       .populate('author', 'name role avatar')

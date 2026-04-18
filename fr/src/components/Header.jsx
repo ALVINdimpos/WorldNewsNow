@@ -37,18 +37,18 @@ export function Header({
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"16px 0 12px"}}>
           <div onClick={goHome} style={{cursor:"pointer",display:"flex",alignItems:"center",gap:10}}>
             <img src="/worldnewsnow_icon.svg" alt="WorldNewsNow"
-              style={{width:36,height:36,flexShrink:0}} />
+              style={{width:32,height:32,flexShrink:0}} />
             <div>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:3,color:"var(--gold)",lineHeight:1}}>
+              <div className="header-logo-name" style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:26,letterSpacing:3,color:"var(--gold)",lineHeight:1}}>
                 WORLDNEWSNOW
               </div>
-              <div style={{fontFamily:"'DM Mono',monospace",fontSize:9,color:"var(--muted)",letterSpacing:2.5,textTransform:"uppercase",marginTop:2}}>
+              <div className="header-logo-tag" style={{fontFamily:"'DM Mono',monospace",fontSize:9,color:"var(--muted)",letterSpacing:2.5,textTransform:"uppercase",marginTop:2}}>
                 Global · Live · Independent
               </div>
             </div>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:12}}>
-            <div style={{display:"flex",alignItems:"center",gap:7,background:"rgba(74,222,128,0.08)",
+            <div className="header-live" style={{display:"flex",alignItems:"center",gap:7,background:"rgba(74,222,128,0.08)",
               border:"1px solid rgba(74,222,128,0.28)",padding:"5px 12px",borderRadius:100,
               fontSize:11,color:"var(--green)",fontFamily:"'DM Mono',monospace",letterSpacing:1}}>
               <div style={{width:6,height:6,borderRadius:"50%",background:"var(--green)",animation:"pulse 2s infinite"}}/>
@@ -142,7 +142,7 @@ export function Header({
                 )}
               </div>
             ) : (
-              <div style={{display:"flex",gap:8}}>
+              <div className="header-auth" style={{display:"flex",gap:8}}>
                 <button className="btn-ghost" style={{fontSize:12,padding:"6px 14px"}}
                   onClick={()=>setAuthView("login")}>Sign in</button>
                 <button className="btn-gold" style={{padding:"6px 16px"}}
@@ -151,7 +151,7 @@ export function Header({
             )}
           </div>
         </div>
-        <div style={{display:"flex",gap:6,paddingBottom:14,overflowX:"auto",scrollbarWidth:"none"}}>
+        <div className="cat-nav">
           {CATS.map(c => (
             <button key={c} className={`cat-btn ${activeCat===c?"active":""}`}
               onClick={()=>{setActiveCat(c); goHome();}}>

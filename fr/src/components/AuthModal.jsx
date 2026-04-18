@@ -34,8 +34,8 @@ export function AuthModal({ authView, setAuthView, authForm, setAuthForm, handle
               fontFamily:"'DM Mono',monospace",marginBottom:10}}>Account Type</div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:20}}>
               {[
-                {r:"user",  emoji:"👤", label:"Reader",     desc:"Comment, like, and follow stories"},
-                {r:"journalist",emoji:"✍️",label:"Journalist",desc:"Publish stories and build your byline"},
+                {r:"reader",    emoji:"👤", label:"Reader",     desc:"Comment, like, and follow stories"},
+                {r:"journalist",emoji:"✍️", label:"Journalist", desc:"Publish stories and build your byline"},
               ].map(opt=>(
                 <div key={opt.r} onClick={()=>setAuthForm(f=>({...f,role:opt.r}))} style={{
                   background: authForm.role===opt.r?"rgba(212,168,83,0.08)":"var(--d4)",
