@@ -1,6 +1,17 @@
-const nodemailer = require('nodemailer');
+function getNodemailer() {
+  try {
+    return require('nodemailer');
+  } catch {
+    const err = new Error(
+      'nodemailer is not installed. From the bn folder run: npm install nodemailer'
+    );
+    err.code = 'MODULE_NOT_FOUND';
+    throw err;
+  }
+}
 
 function createTransport() {
+  const nodemailer = getNodemailer();
   return nodemailer.createTransport({
     host:   process.env.SMTP_HOST || 'smtp.gmail.com',
     port:   Number(process.env.SMTP_PORT) || 587,
