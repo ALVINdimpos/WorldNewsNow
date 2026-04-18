@@ -44,10 +44,31 @@ const authLimiter = rateLimit({
   message: { success: false, message: 'Too many login attempts, please try again later.' },
 });
 
+// Per-IP rate limits for engagement endpoints (prevent spam inflation)
+const likeLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  keyGenerator: (req) => req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip,
+  message: { success: false, message: 'Too many likes, please slow down.' },
+});
+
+const commentLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 10,
+  keyGenerator: (req) => req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip,
+  message: { success: false, message: 'Too many comments, please wait a few minutes.' },
+});
+
 app.use('/api/auth', authLimiter);
 app.use('/api/auth', require('./routes/auth'));
+
+app.use('/api/articles/:id/like', likeLimiter);
+app.use('/api/comments/:id/like', likeLimiter);
+app.use('/api/comments', commentLimiter);
+
 app.use('/api/articles', require('./routes/articles'));
 app.use('/api/comments', require('./routes/comments'));
+app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/journalists', require('./routes/journalists'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/', require('./routes/sitemap'));

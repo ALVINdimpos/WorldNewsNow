@@ -18,8 +18,9 @@ const articleBodyValidation = [
     .withMessage(`Category must be one of: ${CATEGORIES.join(', ')}`),
 ];
 
-router.get('/', optionalAuth, ctrl.getArticles);
+router.get('/bookmarks', protect, ctrl.getBookmarks);
 router.get('/journalist/:userId', ctrl.getJournalistArticles);
+router.get('/', optionalAuth, ctrl.getArticles);
 router.get('/:id', optionalAuth, ctrl.getArticle);
 
 router.post('/', protect, requireRole('journalist', 'admin'), articleBodyValidation, validate, ctrl.createArticle);
@@ -27,6 +28,7 @@ router.patch('/:id', protect, requireRole('journalist', 'admin'), validate, ctrl
 router.delete('/:id', protect, requireRole('journalist', 'admin'), ctrl.deleteArticle);
 router.post('/:id/publish', protect, requireRole('journalist', 'admin'), ctrl.publishArticle);
 router.post('/:id/unpublish', protect, requireRole('journalist', 'admin'), ctrl.unpublishArticle);
-router.post('/:id/like', protect, ctrl.likeArticle);
+router.post('/:id/like', optionalAuth, ctrl.likeArticle);
+router.post('/:id/bookmark', protect, ctrl.bookmarkArticle);
 
 module.exports = router;

@@ -11,7 +11,13 @@ const commentSchema = new mongoose.Schema(
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
+      default: null,
+    },
+    /** True when posted without an account (author is null). Stored explicitly for queries and analytics. */
+    isAnonymous: {
+      type: Boolean,
+      default: false,
     },
     article: {
       type: mongoose.Schema.Types.ObjectId,
@@ -32,6 +38,14 @@ const commentSchema = new mongoose.Schema(
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+    isHidden: {
+      type: Boolean,
+      default: false,
+    },
+    reportCount: {
+      type: Number,
+      default: 0,
     },
   },
   {

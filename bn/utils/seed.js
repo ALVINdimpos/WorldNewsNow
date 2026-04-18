@@ -5,6 +5,10 @@ const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 const JournalistProfile = require('../models/JournalistProfile');
 const Subscriber = require('../models/Subscriber');
+const Bookmark = require('../models/Bookmark');
+const Notification = require('../models/Notification');
+const ViewLog = require('../models/ViewLog');
+const Report = require('../models/Report');
 const connectDB = require('../config/db');
 
 // ─── Journalist seed data ────────────────────────────────────────────────────
@@ -515,6 +519,10 @@ const seed = async () => {
     Comment.deleteMany({}),
     JournalistProfile.deleteMany({}),
     Subscriber.deleteMany({}),
+    Bookmark.deleteMany({}),
+    Notification.deleteMany({}),
+    ViewLog.deleteMany({}),
+    Report.deleteMany({}),
   ]);
 
   // Create journalists
@@ -528,6 +536,7 @@ const seed = async () => {
       role: 'journalist',
       bio: j.bio,
       avatar: j.avatar,
+      emailVerified: true,
     });
     await JournalistProfile.create({
       user: user._id,
@@ -551,6 +560,7 @@ const seed = async () => {
       password: r.password,
       role: 'reader',
       bio: r.bio,
+      emailVerified: true,
     });
     readerUsers.push(user);
     console.log(`   ✓ ${user.name}`);
@@ -566,6 +576,11 @@ const seed = async () => {
   const createdArticles = [];
   for (const def of articleDefs) {
     const author = journalistMap[def.authorKey];
+    const seedLikes = readerUsers
+      .filter(() => Math.random() > 0.4)
+      .map((u) => u._id)
+      .concat(journalistUsers.filter(() => Math.random() > 0.7).map((u) => u._id));
+
     const article = await Article.create({
       title: def.title,
       excerpt: def.excerpt,
@@ -581,10 +596,8 @@ const seed = async () => {
       isPublished: true,
       publishedAt: def.publishedAt,
       viewCount: Math.floor(Math.random() * 12000) + 800,
-      likes: readerUsers
-        .filter(() => Math.random() > 0.4)
-        .map((u) => u._id)
-        .concat(journalistUsers.filter(() => Math.random() > 0.7).map((u) => u._id)),
+      likes: seedLikes,
+      totalLikes: seedLikes.length,
     });
     createdArticles.push(article);
     console.log(`   ✓ [${article.category}] ${article.title.substring(0, 65)}...`);
@@ -616,6 +629,37 @@ const seed = async () => {
   }
   console.log(`   ✓ ${totalComments} comments and replies created`);
 
+  // Create sample bookmarks (first reader bookmarks first 3 articles)
+  console.log('\n🔖 Creating sample bookmarks...');
+  const firstReader = readerUsers[0];
+  for (let i = 0; i < Math.min(3, createdArticles.length); i++) {
+    await Bookmark.create({ user: firstReader._id, article: createdArticles[i]._id });
+  }
+  console.log(`   ✓ 3 bookmarks for ${firstReader.name}`);
+
+  // Create sample notifications
+  console.log('\n🔔 Creating sample notifications...');
+  if (readerUsers.length >= 2 && createdArticles.length >= 1) {
+    await Notification.create({
+      user: readerUsers[0]._id,
+      type: 'comment_reply',
+      title: 'New reply to your comment',
+      message: `${readerUsers[1].name} replied: "Agreed, the detail in this reporting is excellent."`,
+      relatedArticle: createdArticles[0]._id,
+      actor: readerUsers[1]._id,
+      read: false,
+    });
+    await Notification.create({
+      user: readerUsers[0]._id,
+      type: 'article_published',
+      title: 'New article published',
+      message: 'A new story in TECH is now live.',
+      relatedArticle: createdArticles[2]._id,
+      read: true,
+    });
+  }
+  console.log('   ✓ 2 sample notifications created');
+
   // Create subscribers
   console.log('\n📧 Creating newsletter subscribers...');
   for (const email of subscriberEmails) {
@@ -628,8 +672,10 @@ const seed = async () => {
   console.log('✅ Database seeded successfully!\n');
   console.log(`   Journalists  : ${journalistUsers.length}`);
   console.log(`   Readers      : ${readerUsers.length}`);
-  console.log(`   Articles     : ${createdArticles.length} (all published)`);
+  console.log(`   Articles     : ${createdArticles.length} (all published, with slugs)`);
   console.log(`   Comments     : ${totalComments}`);
+  console.log(`   Bookmarks    : 3 (sample)`);
+  console.log(`   Notifications: 2 (sample)`);
   console.log(`   Subscribers  : ${subscriberEmails.length}`);
   console.log('\n📋 Journalist login credentials (all password: password123):');
   journalistSeedData.forEach((j) => console.log(`   ${j.email}`));

@@ -22,10 +22,12 @@ export function transformArticle(a) {
     comments:    [],
     commentsCount: a.commentsCount || 0,
     viewCount:   a.viewCount || 0,
-    isDraft:     a.isDraft || false,
-    isPublished: a.isPublished || false,
-    coverImage:  a.coverImage || '',
-    tags:        a.tags || [],
+    isDraft:      a.isDraft || false,
+    isPublished:  a.isPublished || false,
+    coverImage:   a.coverImage || '',
+    tags:         a.tags || [],
+    slug:         a.slug || '',
+    isBookmarked: a.isBookmarked || false,
   };
 }
 

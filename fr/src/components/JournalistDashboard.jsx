@@ -27,12 +27,13 @@ export function JournalistDashboard({ currentUser, goHome }) {
 
   const { data: dashData, isLoading: dashLoading } = useGetDashboardQuery();
 
-  const [createArticle]   = useCreateArticleMutation();
-  const [updateArticle]   = useUpdateArticleMutation();
+  const [createArticle, { isLoading: creatingArticle }]   = useCreateArticleMutation();
+  const [updateArticle, { isLoading: updatingArticle }]   = useUpdateArticleMutation();
   const [deleteArticleMut] = useDeleteArticleMutation();
   const [publishArticle]  = usePublishArticleMutation();
   const [unpublishArticle] = useUnpublishArticleMutation();
   const [updateProfile]   = useUpdateJournalistProfileMutation();
+  const savingArticle = creatingArticle || updatingArticle;
 
   const myArticles = (dashData?.data?.articles || []).map(transformArticle);
   const published  = myArticles.filter(a => a.isPublished && !a.isDraft);
@@ -637,12 +638,12 @@ export function JournalistDashboard({ currentUser, goHome }) {
                 <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
                   <button className="btn-gold"
                     style={{ width:"100%", padding:"12px 16px", fontSize:14, opacity: form.title.trim() ? 1 : 0.45 }}
-                    disabled={!form.title.trim()}
+                    disabled={!form.title.trim() || savingArticle}
                     onClick={() => saveArticle(false)}>
-                    {editingId ? "Update & Publish" : "Publish Now"}
+                    {savingArticle ? "Publishing..." : (editingId ? "Update & Publish" : "Publish Now")}
                   </button>
                   <button
-                    disabled={!form.title.trim()}
+                    disabled={!form.title.trim() || savingArticle}
                     onClick={() => saveArticle(true)}
                     style={{
                       width:"100%", background:"transparent",
@@ -651,7 +652,7 @@ export function JournalistDashboard({ currentUser, goHome }) {
                       fontSize:13, fontFamily:"'DM Sans',sans-serif",
                       transition:"all .2s", opacity: form.title.trim() ? 1 : 0.45,
                     }}>
-                    Save as Draft
+                    {savingArticle ? "Saving..." : "Save as Draft"}
                   </button>
                 </div>
               </div>

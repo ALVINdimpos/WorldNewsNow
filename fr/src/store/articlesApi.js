@@ -5,12 +5,13 @@ export const articlesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
 
     getArticles: build.query({
-      query: ({ category = 'ALL', page = 1, limit = 20, search, featured, breaking } = {}) => {
+      query: ({ category = 'ALL', page = 1, limit = 20, search, featured, breaking, sort } = {}) => {
         const params = new URLSearchParams({ page, limit });
         if (category && category !== 'ALL') params.set('category', category);
         if (search)   params.set('search', search);
         if (featured) params.set('featured', 'true');
         if (breaking) params.set('breaking', 'true');
+        if (sort)     params.set('sort', sort);
         return `/articles?${params}`;
       },
       transformResponse: (res) => ({
@@ -43,6 +44,15 @@ export const articlesApi = baseApi.injectEndpoints({
         pagination: res.pagination,
       }),
       providesTags: [{ type: 'Article', id: 'MINE' }],
+    }),
+
+    getBookmarks: build.query({
+      query: ({ page = 1, limit = 12 } = {}) => `/articles/bookmarks?page=${page}&limit=${limit}`,
+      transformResponse: (res) => ({
+        articles:   (res.data || []).map(transformArticle),
+        pagination: res.pagination,
+      }),
+      providesTags: [{ type: 'Bookmark', id: 'LIST' }],
     }),
 
     createArticle: build.mutation({
@@ -86,6 +96,22 @@ export const articlesApi = baseApi.injectEndpoints({
       },
     }),
 
+    bookmarkArticle: build.mutation({
+      query: (id) => ({ url: `/articles/${id}/bookmark`, method: 'POST' }),
+      invalidatesTags: [{ type: 'Bookmark', id: 'LIST' }],
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            articlesApi.util.updateQueryData('getArticles', { category: 'ALL' }, (draft) => {
+              const art = draft.articles.find((a) => a.id === id);
+              if (art) art.isBookmarked = data.bookmarked;
+            })
+          );
+        } catch {}
+      },
+    }),
+
   }),
   overrideExisting: false,
 });
@@ -94,10 +120,12 @@ export const {
   useGetArticlesQuery,
   useGetArticleQuery,
   useGetJournalistArticlesQuery,
+  useGetBookmarksQuery,
   useCreateArticleMutation,
   useUpdateArticleMutation,
   useDeleteArticleMutation,
   usePublishArticleMutation,
   useUnpublishArticleMutation,
   useLikeArticleMutation,
+  useBookmarkArticleMutation,
 } = articlesApi;

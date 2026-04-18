@@ -41,4 +41,22 @@ router.patch(
   ctrl.changePassword
 );
 
+// Email verification
+router.post('/send-verification', protect, ctrl.sendVerification);
+router.get('/verify-email/:token', ctrl.verifyEmail);
+
+// Password reset
+router.post(
+  '/forgot-password',
+  [body('email').isEmail().withMessage('Valid email is required').trim().toLowerCase()],
+  validate,
+  ctrl.forgotPassword
+);
+router.post(
+  '/reset-password/:token',
+  [body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')],
+  validate,
+  ctrl.resetPassword
+);
+
 module.exports = router;

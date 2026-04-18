@@ -57,6 +57,27 @@ export const authApi = baseApi.injectEndpoints({
       query: (body) => ({ url: '/auth/change-password', method: 'PATCH', body }),
     }),
 
+    forgotPassword: build.mutation({
+      query: (body) => ({ url: '/auth/forgot-password', method: 'POST', body }),
+    }),
+
+    resetPassword: build.mutation({
+      query: ({ token, password }) => ({
+        url: `/auth/reset-password/${token}`,
+        method: 'POST',
+        body: { password },
+      }),
+    }),
+
+    sendVerification: build.mutation({
+      query: () => ({ url: '/auth/send-verification', method: 'POST' }),
+    }),
+
+    verifyEmail: build.mutation({
+      query: (token) => ({ url: `/auth/verify-email/${token}`, method: 'GET' }),
+      invalidatesTags: ['Me'],
+    }),
+
   }),
   overrideExisting: false,
 });
@@ -68,4 +89,8 @@ export const {
   useGetMeQuery,
   useUpdateProfileMutation,
   useChangePasswordMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useSendVerificationMutation,
+  useVerifyEmailMutation,
 } = authApi;

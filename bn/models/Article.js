@@ -49,6 +49,16 @@ const articleSchema = new mongoose.Schema(
         ref: 'User',
       },
     ],
+    guestLikes: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    totalLikes: {
+      type: Number,
+      default: 0,
+      index: true,
+    },
     viewCount: {
       type: Number,
       default: 0,
@@ -72,6 +82,10 @@ const articleSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    slug: {
+      type: String,
+      index: true,
+    },
   },
   {
     timestamps: true,
@@ -81,7 +95,7 @@ const articleSchema = new mongoose.Schema(
 );
 
 articleSchema.virtual('likesCount').get(function () {
-  return this.likes.length;
+  return this.likes.length + (this.guestLikes || 0);
 });
 
 articleSchema.virtual('commentsCount', {
@@ -89,6 +103,19 @@ articleSchema.virtual('commentsCount', {
   localField: '_id',
   foreignField: 'article',
   count: true,
+});
+
+articleSchema.pre('save', function (next) {
+  if (this.isNew || this.isModified('title')) {
+    const base = this.title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .slice(0, 80);
+    this.slug = `${base}-${this._id.toString().slice(-6)}`;
+  }
+  next();
 });
 
 articleSchema.index({ category: 1, isPublished: 1 });

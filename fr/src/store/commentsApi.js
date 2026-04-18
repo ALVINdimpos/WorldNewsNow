@@ -5,18 +5,29 @@ export const commentsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
 
     getComments: build.query({
-      query: (articleId) => `/comments?articleId=${articleId}`,
-      transformResponse: (res) => (res.data || []).map(transformComment),
-      providesTags: (_res, _err, articleId) => [{ type: 'Comment', id: articleId }],
+      query: ({ articleId, page = 1, limit = 10 }) => `/comments?articleId=${articleId}&page=${page}&limit=${limit}`,
+      transformResponse: (res) => ({
+        comments: (res.data || []).map(transformComment),
+        pagination: res.pagination,
+      }),
+      providesTags: (_res, _err, { articleId }) => [{ type: 'Comment', id: articleId }],
     }),
 
     createComment: build.mutation({
-      query: ({ text, articleId, parentId }) => ({
+      query: ({ text, articleId, parentId, anonymous }) => ({
         url: '/comments',
         method: 'POST',
-        body: { text, articleId, parentId },
+        body: {
+          text,
+          articleId,
+          ...(parentId ? { parentId } : {}),
+          anonymous: Boolean(anonymous),
+        },
       }),
-      invalidatesTags: (_res, _err, { articleId }) => [{ type: 'Comment', id: articleId }],
+      invalidatesTags: (_res, _err, { articleId }) => [
+        { type: 'Comment', id: articleId },
+        { type: 'Article', id: articleId },
+      ],
     }),
 
     updateComment: build.mutation({
@@ -33,6 +44,14 @@ export const commentsApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `/comments/${id}/like`, method: 'POST' }),
     }),
 
+    reportComment: build.mutation({
+      query: ({ id, reason, details }) => ({
+        url: `/comments/${id}/report`,
+        method: 'POST',
+        body: { reason, details },
+      }),
+    }),
+
   }),
   overrideExisting: false,
 });
@@ -43,4 +62,5 @@ export const {
   useUpdateCommentMutation,
   useDeleteCommentMutation,
   useLikeCommentMutation,
+  useReportCommentMutation,
 } = commentsApi;
