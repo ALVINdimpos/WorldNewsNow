@@ -1,0 +1,33 @@
+# ── Dependencies ──────────────────────────────────────────────────────────────
+node_modules/
+fr/node_modules/
+bn/node_modules/
+
+# ── Environment variables (never commit secrets) ──────────────────────────────
+.env
+fr/.env
+bn/.env
+
+# ── Frontend build output ─────────────────────────────────────────────────────
+fr/dist/
+fr/.vite/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── OS files ──────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Seed file (contains real DB data / credentials) ──────────────────────────
+bn/utils/seed.js
+
+# ── Editor ────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
