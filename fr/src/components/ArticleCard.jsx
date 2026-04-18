@@ -102,7 +102,7 @@ export function ArticleCard({ article, onClick, onLike, isLiked, onBookmark, cur
   );
 }
 
-export function FeaturedArticle({ article, onClick, onLike, isLiked, onBookmark, currentUser, setAuthView }) {
+export function FeaturedArticle({ article, onClick, onLike, isLiked, onBookmark, onShare, currentUser, setAuthView }) {
   const bookmarked = article.isBookmarked;
 
   function handleBookmark(e) {
@@ -197,8 +197,15 @@ export function FeaturedArticle({ article, onClick, onLike, isLiked, onBookmark,
           >
             {bookmarked ? '🔖' : '🏷'}
           </button>
-          <button className="share-btn" style={{ fontSize: 12, padding: '5px 12px' }}
-            onClick={e => e.stopPropagation()}>
+          <button
+            type="button"
+            className="share-btn"
+            style={{ fontSize: 12, padding: '5px 12px' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onShare?.(article, e);
+            }}
+          >
             ↗ Share
           </button>
         </div>

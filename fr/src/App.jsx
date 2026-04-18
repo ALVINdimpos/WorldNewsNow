@@ -303,6 +303,7 @@ export default function WorldNewsNow() {
                   onLike={likeArticle}
                   isLiked={likedArts.has(featured.id)}
                   onBookmark={bookmarkArticle}
+                  onShare={shareArticle}
                   currentUser={currentUser}
                   setAuthView={setAuthView}
                 />
