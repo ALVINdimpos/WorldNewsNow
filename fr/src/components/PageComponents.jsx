@@ -1,6 +1,6 @@
 export function PageShell({ title, subtitle, children, goHome }) {
   return (
-    <div style={{maxWidth:960,margin:"0 auto",padding:"0 24px 80px"}}>
+    <div className="page-shell" style={{maxWidth:960,margin:"0 auto"}}>
       <button className="btn-ghost" onClick={goHome}
         style={{marginTop:28,marginBottom:32,fontSize:12,padding:"6px 14px"}}>
         ← Back to news

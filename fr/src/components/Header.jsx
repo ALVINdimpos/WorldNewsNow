@@ -154,7 +154,7 @@ export function Header({
       borderBottom: '1px solid var(--border)', position: 'sticky', top: 0,
       background: 'rgba(10,12,15,0.96)', backdropFilter: 'blur(14px)', zIndex: 100,
     }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
+      <div className="header-inner" style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0 12px' }}>
           <div onClick={goHome} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
             <img src="/worldnewsnow_icon.svg" alt="WorldNewsNow"

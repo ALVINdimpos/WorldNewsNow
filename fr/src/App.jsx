@@ -255,9 +255,9 @@ export default function WorldNewsNow() {
           goPage={goPage}
         />
 
-        <div style={{
+        <div className="main-inner" style={{
           flex: 1, width: '100%', maxWidth: 1200, margin: '0 auto',
-          padding: '0 24px 80px', position: 'relative', zIndex: 1, boxSizing: 'border-box',
+          position: 'relative', zIndex: 1, boxSizing: 'border-box',
         }}>
           {currentPage === 'about' ? (
             <><SEO page="about" /><AboutPage goHome={goHome} setAuthView={setAuthView} /></>
