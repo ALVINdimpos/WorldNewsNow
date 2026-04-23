@@ -116,7 +116,7 @@ export function FeaturedArticle({ article, onClick, onLike, isLiked, onBookmark,
       background: 'var(--d2)', border: '1px solid var(--border)', borderRadius: 14,
       padding: '36px 40px', margin: '32px 0 20px', cursor: 'pointer',
       transition: 'all .2s', position: 'relative', overflow: 'hidden',
-    }} className="card-hover">
+    }} className="card-hover featured-card">
       <div style={{
         position: 'absolute', top: 0, right: 0, width: 300, height: 300,
         background: 'radial-gradient(circle at top right, rgba(212,168,83,0.07) 0%, transparent 65%)',

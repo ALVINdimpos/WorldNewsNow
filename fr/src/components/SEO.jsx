@@ -65,7 +65,7 @@ export function SEO({ article, page = 'home', category, canonical }) {
     const title        = truncate(article.title, 110);
     const description  = truncate(article.excerpt || plainContent, 160);
     const image        = article.coverImage || DEFAULT_IMAGE;
-    const url          = `${SITE_URL}/article/${article.id}`;
+    const url          = `${SITE_URL}/?article=${article.id}`;
     const authorName   = article.author?.name || SITE_NAME;
     const publishedAt  = article.publishedAt || new Date().toISOString();
     const keywords     = [

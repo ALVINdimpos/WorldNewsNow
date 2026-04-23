@@ -52,6 +52,15 @@ export default function WorldNewsNow() {
   const COMMENT_PAGE_SIZE = 10;
 
   useEffect(() => {
+    const articleId = new URLSearchParams(window.location.search).get('article');
+    if (articleId) {
+      setSelectedId(articleId);
+      setCurrentPage(null);
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
+  useEffect(() => {
     if (authView) {
       setAuthForm({ name: '', email: '', pass: '', role: 'reader' });
       setAuthError('');
@@ -82,8 +91,8 @@ export default function WorldNewsNow() {
   const [logoutMutation]                          = useLogoutMutation();
 
   // ── Derived data ───────────────────────────────────────────────────────────
-  const articles    = articlesData?.articles || [];
-  const featured    = activeCat === 'ALL' ? articles.find((a) => a.featured) : null;
+  const articles = (articlesData?.articles || []).filter((a) => a.category !== 'POLITICS');
+  const featured = activeCat === 'ALL' ? articles.find((a) => a.featured) : null;
   const gridArticles = activeCat === 'ALL' ? articles.filter((a) => !a.featured) : articles;
   const selected    = articleData?.article || null;
   const allComments = articleData?.comments || [];
@@ -208,29 +217,40 @@ export default function WorldNewsNow() {
   function goHome() {
     setSelectedId(null);
     setCurrentPage(null);
+    const url = new URL(window.location.href);
+    url.searchParams.delete('article');
+    window.history.pushState({}, '', `${url.pathname}${url.search}`);
     refetchArticles();
+    window.scrollTo(0, 0);
+  }
+  function openArticle(id) {
+    if (!id) return;
+    setSelectedId(id);
+    setCurrentPage(null);
+    const url = new URL(window.location.href);
+    url.searchParams.set('article', id);
+    window.history.pushState({}, '', `${url.pathname}${url.search}`);
     window.scrollTo(0, 0);
   }
   function goPage(slug) {
     // Handle article navigation from notification
     if (slug?.startsWith('article:')) {
-      setSelectedId(slug.replace('article:', ''));
-      setCurrentPage(null);
-      window.scrollTo(0, 0);
+      openArticle(slug.replace('article:', ''));
       return;
     }
     setCurrentPage(slug);
     setSelectedId(null);
+    const url = new URL(window.location.href);
+    url.searchParams.delete('article');
+    window.history.pushState({}, '', `${url.pathname}${url.search}`);
     window.scrollTo(0, 0);
   }
 
   function shareArticle(article, e) {
     e?.stopPropagation();
-    const SITE = import.meta.env.VITE_API_URL
-      ? String(import.meta.env.VITE_API_URL).replace('/api', '').replace(/\/$/, '').replace(':5001', '')
-      : window.location.origin;
-    const slug = article.slug || article.id;
-    const url = `${SITE}/article/${slug}`;
+    const SITE = import.meta.env.VITE_SITE_URL || window.location.origin;
+    const articleId = encodeURIComponent(article.id);
+    const url = `${String(SITE).replace(/\/$/, '')}/?article=${articleId}`;
     const text = `${article.title} — WorldNewsNow`;
     if (navigator.share) {
       navigator.share({ title: article.title, text: article.excerpt, url }).catch(() => {});
@@ -275,7 +295,7 @@ export default function WorldNewsNow() {
             currentUser
               ? <BookmarksPage
                   goHome={goHome}
-                  onArticleClick={(id) => { setSelectedId(id); setCurrentPage(null); window.scrollTo(0, 0); }}
+                  onArticleClick={(id) => openArticle(id)}
                   onLike={likeArticle}
                   likedArts={likedArts}
                   onBookmark={bookmarkArticle}
@@ -299,7 +319,7 @@ export default function WorldNewsNow() {
               {!loadingArticles && featured && activeCat === 'ALL' && (
                 <FeaturedArticle
                   article={featured}
-                  onClick={() => setSelectedId(featured.id)}
+                  onClick={() => openArticle(featured.id)}
                   onLike={likeArticle}
                   isLiked={likedArts.has(featured.id)}
                   onBookmark={bookmarkArticle}
@@ -348,7 +368,7 @@ export default function WorldNewsNow() {
                       <ArticleCard
                         key={a.id}
                         article={a}
-                        onClick={() => setSelectedId(a.id)}
+                        onClick={() => openArticle(a.id)}
                         onLike={likeArticle}
                         isLiked={likedArts.has(a.id)}
                         onBookmark={bookmarkArticle}

@@ -85,6 +85,10 @@ textarea::placeholder,input::placeholder{color:var(--muted);}
   .header-inner{padding:0 8px;}
   .main-inner{padding:0 8px 64px;}
   .page-shell{padding:0 8px 64px;}
+  .art-card{padding:12px;}
+  .featured-card{padding:20px 14px!important;}
+  .account-type-label{display:none!important;}
+  .account-type-desc{display:none!important;}
   .header-logo-name{font-size:18px!important;letter-spacing:2px!important;}
   .header-logo-tag{display:none!important;}
   .header-live{display:none!important;}

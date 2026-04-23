@@ -1,4 +1,4 @@
-export const CATS = ["ALL","WORLD","POLITICS","TECH","BUSINESS","SPORTS","SCIENCE","ENTERTAINMENT"];
+export const CATS = ["ALL","WORLD","TECH","BUSINESS","SPORTS","SCIENCE","ENTERTAINMENT"];
 
 export const CAT_STYLE = {
   TECH:         {bg:"rgba(96,165,250,0.12)",   color:"#60A5FA",  border:"rgba(96,165,250,0.3)"},

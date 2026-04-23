@@ -110,7 +110,7 @@ export function AuthModal({ authView, setAuthView, authForm, setAuthForm, handle
 
             {authView === 'signup' && (
               <>
-                <div style={{
+                <div className="account-type-label" style={{
                   fontSize: 10, color: 'var(--muted)', letterSpacing: 1.5, textTransform: 'uppercase',
                   fontFamily: "'DM Mono',monospace", marginBottom: 10,
                 }}>Account Type</div>
@@ -127,7 +127,7 @@ export function AuthModal({ authView, setAuthView, authForm, setAuthForm, handle
                     }}>
                       <div style={{ fontSize: 22, marginBottom: 6 }}>{opt.emoji}</div>
                       <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 3 }}>{opt.label}</div>
-                      <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.4 }}>{opt.desc}</div>
+                      <div className="account-type-desc" style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.4 }}>{opt.desc}</div>
                     </div>
                   ))}
                 </div>
