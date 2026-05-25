@@ -169,7 +169,46 @@ bn/
 In `development`, any `localhost` port is allowed automatically.
 In `production`, only origins listed in `CLIENT_URL` are allowed (comma-separated for multiple).
 
-## Deployment (Render)
+## Deployment
+
+### Northflank (Docker)
+
+1. Push this repo to GitHub (the `Dockerfile` lives in `bn/`).
+2. In [Northflank](https://northflank.com), create a **Project** → **Service** → **Combined build & deploy**.
+3. Connect your GitHub repo and configure the build:
+   - **Build context** → `bn`
+   - **Dockerfile path** → `Dockerfile` (relative to build context)
+4. Under **Ports**, expose the HTTP port (Northflank sets `PORT` automatically — the app reads it).
+5. Add **Environment variables** (see table below). Set `NODE_ENV=production`.
+6. Deploy. When live, verify: `https://<your-service-url>/api/health`
+
+| Variable | Required | Example |
+|---|---|---|
+| `MONGO_URI` | Yes | `mongodb+srv://user:pass@cluster.mongodb.net/worldnewsnow` |
+| `JWT_SECRET` | Yes | long random string |
+| `JWT_REFRESH_SECRET` | Yes | long random string |
+| `CLIENT_URL` | Yes | `https://your-frontend.vercel.app` (comma-separated for multiple) |
+| `NODE_ENV` | Yes | `production` |
+| `JWT_EXPIRE` | No | `7d` |
+| `JWT_REFRESH_EXPIRE` | No | `30d` |
+| `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS` | No | only if you want welcome emails |
+
+> **MongoDB Atlas:** allow access from anywhere (`0.0.0.0/0`) or add Northflank's egress IPs — container IPs are not fixed by default.
+
+**Test the image locally:**
+
+```bash
+cd bn
+docker build -t worldnewsnow-api .
+docker run --rm -p 8080:8080 \
+  -e MONGO_URI="your_atlas_uri" \
+  -e JWT_SECRET="test" \
+  -e JWT_REFRESH_SECRET="test" \
+  -e CLIENT_URL="http://localhost:5173" \
+  worldnewsnow-api
+```
+
+### Render (no Docker)
 
 1. Create a new **Web Service** on [render.com](https://render.com)
 2. Connect your GitHub repo
