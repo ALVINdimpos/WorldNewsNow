@@ -42,7 +42,7 @@ export function AuthModal({ authView, setAuthView, authForm, setAuthForm, handle
         <div style={{
           fontFamily: "'Bebas Neue',sans-serif", fontSize: 22, letterSpacing: 3,
           color: 'var(--gold)', marginBottom: 4,
-        }}>WORLDNEWSNOW</div>
+        }}>PRIMEWORLDNEWS</div>
 
         {isForgot ? (
           <>

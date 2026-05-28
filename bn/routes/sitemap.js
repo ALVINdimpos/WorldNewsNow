@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Article = require('../models/Article');
 
-const SITE_URL = process.env.CLIENT_URL || 'https://worldnewsnow.vercel.app';
+const SITE_URL = process.env.CLIENT_URL || 'https://www.primeworld.news';
 const CATEGORIES = ['WORLD', 'POLITICS', 'TECH', 'BUSINESS', 'SPORTS', 'SCIENCE', 'ENTERTAINMENT'];
 
 const esc = (str) => String(str)
@@ -45,7 +45,7 @@ router.get('/sitemap.xml', async (req, res) => {
     <priority>0.8</priority>
     <news:news>
       <news:publication>
-        <news:name>WorldNewsNow</news:name>
+        <news:name>PRIMEWORLDNEWS</news:name>
         <news:language>en</news:language>
       </news:publication>
       <news:publication_date>${new Date(a.publishedAt).toISOString()}</news:publication_date>
@@ -83,7 +83,7 @@ async function buildRSS(category) {
     .limit(50)
     .lean();
 
-  const chanTitle = category ? `WorldNewsNow — ${category}` : 'WorldNewsNow';
+  const chanTitle = category ? `PRIMEWORLDNEWS — ${category}` : 'PRIMEWORLDNEWS';
   const chanLink = category ? `${SITE_URL}?category=${category}` : SITE_URL;
 
   const items = articles.map((a) => {
@@ -94,7 +94,7 @@ async function buildRSS(category) {
       <link>${esc(link)}</link>
       <guid isPermaLink="true">${esc(link)}</guid>
       <description>${esc(a.excerpt)}</description>
-      <author>${esc(a.author?.name || 'WorldNewsNow')}</author>
+      <author>${esc(a.author?.name || 'PRIMEWORLDNEWS')}</author>
       <category>${esc(a.category)}</category>
       <pubDate>${new Date(a.publishedAt).toUTCString()}</pubDate>
       ${a.coverImage ? `<enclosure url="${esc(a.coverImage)}" type="image/jpeg" length="0"/>` : ''}

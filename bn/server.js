@@ -74,7 +74,7 @@ app.use('/api/contact', require('./routes/contact'));
 app.use('/', require('./routes/sitemap'));
 
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'WorldNewsNow API is running', env: process.env.NODE_ENV });
+  res.json({ success: true, message: 'PRIMEWORLDNEWS API is running', env: process.env.NODE_ENV });
 });
 
 app.use('*', (req, res) => {

@@ -1,6 +1,6 @@
-# WorldNewsNow — Frontend
+# PRIMEWORLDNEWS — Frontend
 
-React + Vite single-page application for the WorldNewsNow news platform.
+React + Vite single-page application for the PRIMEWORLDNEWS news platform.
 
 ## Tech Stack
 
@@ -33,7 +33,7 @@ Create a `.env` file in this folder:
 
 ```env
 VITE_API_URL=http://localhost:5001
-VITE_SITE_URL=https://worldnewsnow.vercel.app
+VITE_SITE_URL=https://PRIMEWORLDNEWS.vercel.app
 ```
 
 | Variable | Description |

@@ -6,7 +6,7 @@ export function JournalistsPage({ goHome }) {
 
   return (
     <PageShell goHome={goHome} title="Our Journalists"
-      subtitle="Meet the reporters, editors, and investigators behind WorldNewsNow's global coverage.">
+      subtitle="Meet the reporters, editors, and investigators behind PRIMEWORLDNEWS's global coverage.">
       {isLoading && (
         <div style={{textAlign:"center",padding:"60px 0",color:"var(--muted)",
           fontFamily:"'DM Mono',monospace",fontSize:13,letterSpacing:1}}>

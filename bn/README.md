@@ -1,6 +1,6 @@
-# WorldNewsNow — Backend API
+# PRIMEWORLDNEWS — Backend API
 
-Node.js + Express + Mongoose REST API for the WorldNewsNow news platform.
+Node.js + Express + Mongoose REST API for the PRIMEWORLDNEWS news platform.
 
 ## Tech Stack
 
@@ -44,7 +44,7 @@ Create a `.env` file in this folder:
 PORT=5001
 NODE_ENV=development
 
-MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/worldnewsnow
+MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/PRIMEWORLDNEWS
 
 JWT_SECRET=your_secret_key
 JWT_EXPIRE=7d
@@ -184,7 +184,7 @@ In `production`, only origins listed in `CLIENT_URL` are allowed (comma-separate
 
 | Variable | Required | Example |
 |---|---|---|
-| `MONGO_URI` | Yes | `mongodb+srv://user:pass@cluster.mongodb.net/worldnewsnow` |
+| `MONGO_URI` | Yes | `mongodb+srv://user:pass@cluster.mongodb.net/PRIMEWORLDNEWS` |
 | `JWT_SECRET` | Yes | long random string |
 | `JWT_REFRESH_SECRET` | Yes | long random string |
 | `CLIENT_URL` | Yes | `https://your-frontend.vercel.app` (comma-separated for multiple) |
@@ -199,13 +199,13 @@ In `production`, only origins listed in `CLIENT_URL` are allowed (comma-separate
 
 ```bash
 cd bn
-docker build -t worldnewsnow-api .
+docker build -t PRIMEWORLDNEWS-api .
 docker run --rm -p 8080:8080 \
   -e MONGO_URI="your_atlas_uri" \
   -e JWT_SECRET="test" \
   -e JWT_REFRESH_SECRET="test" \
   -e CLIENT_URL="http://localhost:5173" \
-  worldnewsnow-api
+  PRIMEWORLDNEWS-api
 ```
 
 ### Render (no Docker)

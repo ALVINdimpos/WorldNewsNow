@@ -157,14 +157,14 @@ export function Header({
       <div className="header-inner" style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0 12px' }}>
           <div onClick={goHome} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <img src="/worldnewsnow_icon.svg" alt="WorldNewsNow"
+            <img src="/worldnewsnow_icon.svg" alt="PRIMEWORLDNEWS"
               style={{ width: 32, height: 32, flexShrink: 0 }} />
             <div>
               <div className="header-logo-name" style={{
                 fontFamily: "'Bebas Neue',sans-serif", fontSize: 26, letterSpacing: 3,
                 color: 'var(--gold)', lineHeight: 1,
               }}>
-                WORLDNEWSNOW
+                PRIMEWORLDNEWS
               </div>
               <div className="header-logo-tag" style={{
                 fontFamily: "'DM Mono',monospace", fontSize: 9, color: 'var(--muted)',

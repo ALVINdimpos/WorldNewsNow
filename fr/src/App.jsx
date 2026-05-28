@@ -29,7 +29,7 @@ const SORT_OPTIONS = [
   { value: 'oldest',    label: 'Oldest' },
 ];
 
-export default function WorldNewsNow() {
+export default function PRIMEWORLDNEWS() {
   const dispatch    = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
   const currentToken = useSelector(selectCurrentToken);
@@ -251,7 +251,7 @@ export default function WorldNewsNow() {
     const SITE = import.meta.env.VITE_SITE_URL || window.location.origin;
     const articleId = encodeURIComponent(article.id);
     const url = `${String(SITE).replace(/\/$/, '')}/?article=${articleId}`;
-    const text = `${article.title} — WorldNewsNow`;
+    const text = `${article.title} — PRIMEWORLDNEWS`;
     if (navigator.share) {
       navigator.share({ title: article.title, text: article.excerpt, url }).catch(() => {});
     } else {

@@ -23,8 +23,8 @@ function createTransport() {
   });
 }
 
-const FROM = `WorldNewsNow <${process.env.SMTP_USER || 'noreply@worldnewsnow.com'}>`;
-const SITE = process.env.CLIENT_URL || 'https://worldnewsnow.vercel.app';
+const FROM = `PRIMEWORLDNEWS <${process.env.SMTP_USER || 'noreply@PRIMEWORLDNEWS.com'}>`;
+const SITE = process.env.CLIENT_URL || 'https://PRIMEWORLDNEWS.vercel.app';
 
 exports.sendVerificationEmail = async (email, token) => {
   const link = `${SITE}/verify-email?token=${token}`;
@@ -32,10 +32,10 @@ exports.sendVerificationEmail = async (email, token) => {
   await transport.sendMail({
     from: FROM,
     to: email,
-    subject: 'Verify your WorldNewsNow email',
+    subject: 'Verify your PRIMEWORLDNEWS email',
     html: `
       <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
-        <h2 style="color:#D4A853">WorldNewsNow</h2>
+        <h2 style="color:#D4A853">PRIMEWORLDNEWS</h2>
         <p>Click the link below to verify your email address. The link expires in 24 hours.</p>
         <a href="${link}" style="display:inline-block;background:#D4A853;color:#0A0C0F;padding:12px 24px;
           border-radius:8px;text-decoration:none;font-weight:600;margin:16px 0">
@@ -52,10 +52,10 @@ exports.sendPasswordResetEmail = async (email, token) => {
   await transport.sendMail({
     from: FROM,
     to: email,
-    subject: 'Reset your WorldNewsNow password',
+    subject: 'Reset your PRIMEWORLDNEWS password',
     html: `
       <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
-        <h2 style="color:#D4A853">WorldNewsNow</h2>
+        <h2 style="color:#D4A853">PRIMEWORLDNEWS</h2>
         <p>You requested a password reset. Click the link below — it expires in 1 hour.</p>
         <a href="${link}" style="display:inline-block;background:#D4A853;color:#0A0C0F;padding:12px 24px;
           border-radius:8px;text-decoration:none;font-weight:600;margin:16px 0">

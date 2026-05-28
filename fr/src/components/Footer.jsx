@@ -24,7 +24,7 @@ export function Footer({ setActiveCat, goHome, goPage }) {
         {/* Row 1: Brand — always full width */}
         <div style={{marginBottom:32}}>
           <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,letterSpacing:3,color:"var(--gold)",marginBottom:6}}>
-            WORLDNEWSNOW
+            PRIMEWORLDNEWS
           </div>
           <p style={{fontSize:12,color:"var(--muted)",lineHeight:1.7,maxWidth:260}}>
             Independent global journalism. Covering the stories that matter, without fear or favour.
@@ -116,7 +116,7 @@ export function Footer({ setActiveCat, goHome, goPage }) {
           flexWrap:"wrap",gap:12,
         }}>
           <span style={{fontSize:11,color:"var(--muted)",fontFamily:"'DM Mono',monospace",letterSpacing:.5}}>
-            © {new Date().getFullYear()} WorldNewsNow. All rights reserved.
+            © {new Date().getFullYear()} PRIMEWORLDNEWS. All rights reserved.
           </span>
           <div className="footer-links" style={{display:"flex",gap:20}}>
             {["Privacy Policy","Terms of Use","Cookie Settings"].map(l=>(

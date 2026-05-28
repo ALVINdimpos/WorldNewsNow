@@ -75,7 +75,7 @@ exports.careersNotify = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      message: "You'll be notified about new job openings at WorldNewsNow!",
+      message: "You'll be notified about new job openings at PRIMEWORLDNEWS!",
     });
   } catch (err) {
     next(err);

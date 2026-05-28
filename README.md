@@ -1,11 +1,11 @@
-# WorldNewsNow
+# PRIMEWORLDNEWS
 
 Independent global journalism platform — breaking news, politics, technology, business, science, sports and entertainment.
 
 ## Project Structure
 
 ```
-WorldNewsNow/
+PRIMEWORLDNEWS/
 ├── fr/          # React + Vite frontend
 ├── bn/          # Node.js + Express + Mongoose backend API
 ├── .gitignore
@@ -28,8 +28,8 @@ WorldNewsNow/
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/worldnewsnow.git
-cd worldnewsnow
+git clone https://github.com/your-username/PRIMEWORLDNEWS.git
+cd PRIMEWORLDNEWS
 ```
 
 ### 2. Set up the backend

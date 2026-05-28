@@ -1,8 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 
-const SITE_NAME  = 'WorldNewsNow';
-const SITE_URL   = import.meta.env.VITE_SITE_URL || 'https://worldnewsnow.vercel.app';
-const TWITTER_HANDLE = '@WorldNewsNow';
+const SITE_NAME  = 'PRIMEWORLDNEWS';
+const SITE_URL   = import.meta.env.VITE_SITE_URL || 'https://www.primeworld.news';
+const TWITTER_HANDLE = '@PRIMEWORLDNEWS';
 const DEFAULT_IMAGE  = `${SITE_URL}/og-default.jpg`;
 
 // ── Organisation JSON-LD (included on every page) ────────────────────────────
@@ -13,14 +13,14 @@ const orgSchema = {
   url: SITE_URL,
   logo: {
     '@type': 'ImageObject',
-    url: `${SITE_URL}/worldnewsnow_icon.svg`,
+    url: `${SITE_URL}/PRIMEWORLDNEWS_icon.svg`,
     width: 512,
     height: 512,
   },
   sameAs: [
-    'https://twitter.com/WorldNewsNow',
-    'https://facebook.com/WorldNewsNow',
-    'https://linkedin.com/company/worldnewsnow',
+    'https://twitter.com/PRIMEWORLDNEWS',
+    'https://facebook.com/PRIMEWORLDNEWS',
+    'https://linkedin.com/company/PRIMEWORLDNEWS',
   ],
   foundingDate: '2019',
   description: 'Independent global journalism covering the stories that matter, without fear or favour.',
@@ -97,7 +97,7 @@ export function SEO({ article, page = 'home', category, canonical }) {
       publisher: {
         '@type': 'NewsMediaOrganization',
         name:    SITE_NAME,
-        logo:    { '@type': 'ImageObject', url: `${SITE_URL}/worldnewsnow_icon.svg` },
+        logo:    { '@type': 'ImageObject', url: `${SITE_URL}/PRIMEWORLDNEWS_icon.svg` },
       },
       articleSection:  article.category,
       keywords,
@@ -169,32 +169,32 @@ export function SEO({ article, page = 'home', category, canonical }) {
   const pages = {
     home: {
       title:       `${SITE_NAME} — Independent Global Journalism`,
-      description: 'WorldNewsNow delivers independent global journalism — breaking news, politics, technology, business, science, sports and entertainment from around the world.',
+      description: 'PRIMEWORLDNEWS delivers independent global journalism — breaking news, politics, technology, business, science, sports and entertainment from around the world.',
       url:         SITE_URL,
     },
     about: {
       title:       `About Us — ${SITE_NAME}`,
-      description: `Learn about WorldNewsNow's mission, newsroom, and the journalists behind our independent global coverage.`,
+      description: `Learn about PRIMEWORLDNEWS's mission, newsroom, and the journalists behind our independent global coverage.`,
       url:         `${SITE_URL}/about`,
     },
     journalists: {
       title:       `Our Journalists — ${SITE_NAME}`,
-      description: 'Meet the reporters, editors, and investigators behind WorldNewsNow\'s global coverage across politics, technology, science, and more.',
+      description: 'Meet the reporters, editors, and investigators behind PRIMEWORLDNEWS\'s global coverage across politics, technology, science, and more.',
       url:         `${SITE_URL}/journalists`,
     },
     advertise: {
       title:       `Advertise With Us — ${SITE_NAME}`,
-      description: 'Reach a highly engaged, globally-minded audience with WorldNewsNow advertising solutions including display, sponsored content, and newsletter placements.',
+      description: 'Reach a highly engaged, globally-minded audience with PRIMEWORLDNEWS advertising solutions including display, sponsored content, and newsletter placements.',
       url:         `${SITE_URL}/advertise`,
     },
     careers: {
       title:       `Careers — ${SITE_NAME}`,
-      description: 'Join the WorldNewsNow team. We\'re a small, independent newsroom hiring carefully. Explore journalism and editorial career opportunities.',
+      description: 'Join the PRIMEWORLDNEWS team. We\'re a small, independent newsroom hiring carefully. Explore journalism and editorial career opportunities.',
       url:         `${SITE_URL}/careers`,
     },
     category: {
       title:       `${category} News — ${SITE_NAME}`,
-      description: `The latest ${category?.toLowerCase()} news from WorldNewsNow. Independent reporting on the stories that matter.`,
+      description: `The latest ${category?.toLowerCase()} news from PRIMEWORLDNEWS. Independent reporting on the stories that matter.`,
       url:         `${SITE_URL}/?category=${category}`,
     },
   };

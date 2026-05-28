@@ -2,8 +2,8 @@ import { PageShell, Section, StatCard } from './PageComponents';
 
 export function AboutPage({ goHome, setAuthView }) {
   return (
-    <PageShell goHome={goHome} title="About WorldNewsNow"
-      subtitle="We believe an informed world is a better world. WorldNewsNow is an independent newsroom delivering fast, accurate, and fearless global journalism — free from corporate influence or political agenda.">
+    <PageShell goHome={goHome} title="About PRIMEWORLDNEWS"
+      subtitle="We believe an informed world is a better world. PRIMEWORLDNEWS is an independent newsroom delivering fast, accurate, and fearless global journalism — free from corporate influence or political agenda.">
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:12,marginBottom:48}}>
         {[
@@ -17,7 +17,7 @@ export function AboutPage({ goHome, setAuthView }) {
       <Section label="Our Story">
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
           {[
-            {heading:"How We Started", body:"WorldNewsNow was founded in 2019 by a group of journalists who had grown frustrated with the compromises demanded by advertiser-dependent media. We launched with six reporters and a conviction: that readers deserve coverage that follows the evidence, not the revenue."},
+            {heading:"How We Started", body:"PRIMEWORLDNEWS was founded in 2019 by a group of journalists who had grown frustrated with the compromises demanded by advertiser-dependent media. We launched with six reporters and a conviction: that readers deserve coverage that follows the evidence, not the revenue."},
             {heading:"How We Operate", body:"We are reader-supported and foundation-funded. We accept no advertising from governments, political parties, or industries we cover. Every story goes through a three-layer editorial process: reporter, desk editor, and independent fact-checker."},
             {heading:"Our Newsroom", body:"Our journalists are based in sixteen cities across four continents, giving us genuine local expertise rather than parachute reporting. We combine breaking-news speed with the rigour of long-form investigation."},
             {heading:"Our Independence", body:"No shareholder, no billionaire owner, no algorithm determines our editorial agenda. Our editorial charter is publicly published and enforced by an independent board. We have declined acquisition offers from three major media groups."},
@@ -59,7 +59,7 @@ export function AboutPage({ goHome, setAuthView }) {
         </p>
         <button className="btn-gold" style={{fontSize:14,padding:"12px 28px"}}
           onClick={()=>setAuthView("signup")}>
-          Join WorldNewsNow
+          Join PRIMEWORLDNEWS
         </button>
       </div>
     </PageShell>
