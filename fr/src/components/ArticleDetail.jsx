@@ -1,6 +1,7 @@
 import { CAT_STYLE } from '../data/constants';
 import { countAll } from '../utils/helpers';
 import { CommentSection } from './CommentSection';
+import { AdUnit } from './AdSense';
 
 export function ArticleDetail({
   article,
@@ -139,6 +140,8 @@ export function ArticleDetail({
         {article.excerpt}
       </p>
 
+      <AdUnit article={article} placement="top" />
+
       {article.isHtml ? (
         <div
           className="article-body"
@@ -152,6 +155,8 @@ export function ArticleDetail({
           ))}
         </div>
       )}
+
+      <AdUnit article={article} placement="bottom" />
 
       <CommentSection
         comments={article.comments}

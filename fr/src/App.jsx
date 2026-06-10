@@ -4,6 +4,7 @@ import { CATS } from './data/constants';
 import './styles/global.css';
 
 import { SEO }          from './components/SEO';
+import { AdSense }      from './components/AdSense';
 import { Header }       from './components/Header';
 import { Footer }       from './components/Footer';
 import { ArticleCard, FeaturedArticle } from './components/ArticleCard';
@@ -12,9 +13,14 @@ import { AboutPage }    from './components/AboutPage';
 import { JournalistsPage } from './components/JournalistsPage';
 import { AdvertisePage } from './components/AdvertisePage';
 import { CareersPage }  from './components/CareersPage';
+import { PrivacyPage }  from './components/PrivacyPage';
+import { TermsPage }    from './components/TermsPage';
+import { ContactPage }  from './components/ContactPage';
+import { EditorialPage } from './components/EditorialPage';
 import { JournalistDashboard } from './components/JournalistDashboard';
 import { AuthModal }    from './components/AuthModal';
 import { BookmarksPage } from './components/BookmarksPage';
+import { parseRoute, articlePath, pagePath } from './utils/routing';
 
 import { selectCurrentUser, selectCurrentToken } from './store/authSlice';
 import { setCredentials, clearCredentials } from './store/authSlice';
@@ -52,13 +58,39 @@ export default function PRIMEWORLDNEWS() {
   const COMMENT_PAGE_SIZE = 10;
 
   useEffect(() => {
-    const articleId = new URLSearchParams(window.location.search).get('article');
-    if (articleId) {
-      setSelectedId(articleId);
-      setCurrentPage(null);
-      window.scrollTo(0, 0);
-    }
+    applyRoute(parseRoute());
   }, []);
+
+  useEffect(() => {
+    function onPopState() {
+      applyRoute(parseRoute());
+    }
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  function applyRoute(route) {
+    if (route.type === 'article') {
+      setSelectedId(route.slugOrId);
+      setCurrentPage(null);
+    } else if (route.type === 'page') {
+      setCurrentPage(route.page);
+      setSelectedId(null);
+    } else if (route.type === 'category') {
+      setActiveCat(route.category);
+      setSelectedId(null);
+      setCurrentPage(null);
+    } else {
+      setSelectedId(null);
+      setCurrentPage(null);
+    }
+    window.scrollTo(0, 0);
+  }
+
+  function navigate(path) {
+    window.history.pushState({}, '', path);
+    applyRoute(parseRoute());
+  }
 
   useEffect(() => {
     if (authView) {
@@ -96,6 +128,15 @@ export default function PRIMEWORLDNEWS() {
   const gridArticles = activeCat === 'ALL' ? articles.filter((a) => !a.featured) : articles;
   const selected    = articleData?.article || null;
   const allComments = articleData?.comments || [];
+
+  useEffect(() => {
+    if (selected?.slug) {
+      const route = parseRoute();
+      if (route.type === 'article' && route.legacy) {
+        window.history.replaceState({}, '', articlePath(selected.slug));
+      }
+    }
+  }, [selected?.slug, selected?.id]);
 
   // Paginate comments client-side (server returns up to 10 per page; we accumulate)
   const pagedComments = allComments.slice(0, commentPage * COMMENT_PAGE_SIZE);
@@ -215,42 +256,30 @@ export default function PRIMEWORLDNEWS() {
   }
 
   function goHome() {
-    setSelectedId(null);
-    setCurrentPage(null);
-    const url = new URL(window.location.href);
-    url.searchParams.delete('article');
-    window.history.pushState({}, '', `${url.pathname}${url.search}`);
+    setActiveCat('ALL');
+    navigate('/');
     refetchArticles();
-    window.scrollTo(0, 0);
   }
-  function openArticle(id) {
-    if (!id) return;
-    setSelectedId(id);
-    setCurrentPage(null);
-    const url = new URL(window.location.href);
-    url.searchParams.set('article', id);
-    window.history.pushState({}, '', `${url.pathname}${url.search}`);
-    window.scrollTo(0, 0);
+  function openArticle(articleOrId) {
+    const slugOrId = typeof articleOrId === 'object'
+      ? (articleOrId.slug || articleOrId.id)
+      : articleOrId;
+    if (!slugOrId) return;
+    navigate(articlePath(slugOrId));
   }
   function goPage(slug) {
-    // Handle article navigation from notification
     if (slug?.startsWith('article:')) {
       openArticle(slug.replace('article:', ''));
       return;
     }
-    setCurrentPage(slug);
-    setSelectedId(null);
-    const url = new URL(window.location.href);
-    url.searchParams.delete('article');
-    window.history.pushState({}, '', `${url.pathname}${url.search}`);
-    window.scrollTo(0, 0);
+    navigate(pagePath(slug));
   }
 
   function shareArticle(article, e) {
     e?.stopPropagation();
     const SITE = import.meta.env.VITE_SITE_URL || window.location.origin;
-    const articleId = encodeURIComponent(article.id);
-    const url = `${String(SITE).replace(/\/$/, '')}/?article=${articleId}`;
+    const slug = article.slug || article.id;
+    const url = `${String(SITE).replace(/\/$/, '')}${articlePath(slug)}`;
     const text = `${article.title} — PRIMEWORLDNEWS`;
     if (navigator.share) {
       navigator.share({ title: article.title, text: article.excerpt, url }).catch(() => {});
@@ -287,6 +316,14 @@ export default function PRIMEWORLDNEWS() {
             <><SEO page="advertise" /><AdvertisePage goHome={goHome} /></>
           ) : currentPage === 'careers' ? (
             <><SEO page="careers" /><CareersPage goHome={goHome} setAuthView={setAuthView} /></>
+          ) : currentPage === 'privacy' ? (
+            <><SEO page="privacy" /><PrivacyPage goHome={goHome} /></>
+          ) : currentPage === 'terms' ? (
+            <><SEO page="terms" /><TermsPage goHome={goHome} /></>
+          ) : currentPage === 'contact' ? (
+            <><SEO page="contact" /><ContactPage goHome={goHome} /></>
+          ) : currentPage === 'editorial' ? (
+            <><SEO page="editorial" /><EditorialPage goHome={goHome} /></>
           ) : currentPage === 'journalist-dashboard' ? (
             currentUser?.role === 'journalist'
               ? <JournalistDashboard currentUser={currentUser} goHome={goHome} />
@@ -388,6 +425,7 @@ export default function PRIMEWORLDNEWS() {
           ) : selected ? (
             <>
               <SEO article={selected} />
+              <AdSense article={selected} />
               <ArticleDetail
                 article={{ ...selected, comments: pagedComments }}
                 onBack={goHome}

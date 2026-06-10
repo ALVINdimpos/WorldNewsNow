@@ -69,6 +69,8 @@ export function Footer({ setActiveCat, goHome, goPage }) {
               {[
                 {label:"About Us",        slug:"about"},
                 {label:"Our Journalists", slug:"journalists"},
+                {label:"Editorial",       slug:"editorial"},
+                {label:"Contact",         slug:"contact"},
                 {label:"Advertise",       slug:"advertise"},
                 {label:"Careers",         slug:"careers"},
               ].map(l=>(
@@ -118,13 +120,18 @@ export function Footer({ setActiveCat, goHome, goPage }) {
           <span style={{fontSize:11,color:"var(--muted)",fontFamily:"'DM Mono',monospace",letterSpacing:.5}}>
             © {new Date().getFullYear()} PRIMEWORLDNEWS. All rights reserved.
           </span>
-          <div className="footer-links" style={{display:"flex",gap:20}}>
-            {["Privacy Policy","Terms of Use","Cookie Settings"].map(l=>(
-              <span key={l} style={{fontSize:11,color:"var(--muted)",cursor:"pointer",
+          <div className="footer-links" style={{display:"flex",gap:20,flexWrap:"wrap"}}>
+            {[
+              { label: "Privacy Policy", slug: "privacy" },
+              { label: "Terms of Use", slug: "terms" },
+              { label: "Editorial Standards", slug: "editorial" },
+            ].map(l=>(
+              <span key={l.slug} onClick={()=>goPage(l.slug)}
+                style={{fontSize:11,color:"var(--muted)",cursor:"pointer",
                 fontFamily:"'DM Mono',monospace",letterSpacing:.5,transition:"color .15s"}}
                 onMouseEnter={e=>e.currentTarget.style.color="var(--gold)"}
                 onMouseLeave={e=>e.currentTarget.style.color="var(--muted)"}>
-                {l}
+                {l.label}
               </span>
             ))}
           </div>

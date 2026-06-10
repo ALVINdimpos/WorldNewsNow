@@ -71,6 +71,7 @@ app.use('/api/comments', require('./routes/comments'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/journalists', require('./routes/journalists'));
 app.use('/api/contact', require('./routes/contact'));
+app.use('/', require('./routes/prerender'));
 app.use('/', require('./routes/sitemap'));
 
 app.get('/api/health', (req, res) => {

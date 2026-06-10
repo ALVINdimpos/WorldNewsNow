@@ -4,6 +4,7 @@ const Comment = require('../models/Comment');
 const ViewLog = require('../models/ViewLog');
 const Bookmark = require('../models/Bookmark');
 const AppError = require('../utils/AppError');
+const { findArticleByIdOrSlug } = require('../utils/findArticle');
 
 const PAGE_SIZE = 12;
 
@@ -78,20 +79,20 @@ exports.getArticles = async (req, res, next) => {
 // GET /api/articles/:id
 exports.getArticle = async (req, res, next) => {
   try {
-    const article = await Article.findById(req.params.id)
-      .populate('author', 'name role avatar bio')
-      .lean({ virtuals: true });
+    const article = await findArticleByIdOrSlug(req.params.id);
 
     if (!article) return next(new AppError('Article not found', 404));
     if (!article.isPublished && (!req.user || (req.user._id.toString() !== article.author._id.toString() && req.user.role !== 'admin'))) {
       return next(new AppError('Article not found', 404));
     }
 
+    const articleId = article._id;
+
     // Dedup view counting
     const identifier = viewIdentifier(req);
     try {
-      await ViewLog.create({ article: article._id, identifier });
-      await Article.findByIdAndUpdate(req.params.id, { $inc: { viewCount: 1 } });
+      await ViewLog.create({ article: articleId, identifier });
+      await Article.findByIdAndUpdate(articleId, { $inc: { viewCount: 1 } });
       article.viewCount = (article.viewCount || 0) + 1;
     } catch (dupErr) {
       // Duplicate key = already viewed in last 24h, skip increment
@@ -100,7 +101,7 @@ exports.getArticle = async (req, res, next) => {
     // Bookmark status
     let isBookmarked = false;
     if (req.user) {
-      isBookmarked = !!(await Bookmark.findOne({ user: req.user._id, article: article._id }));
+      isBookmarked = !!(await Bookmark.findOne({ user: req.user._id, article: articleId }));
     }
 
     // Liked status for authenticated users
@@ -109,7 +110,7 @@ exports.getArticle = async (req, res, next) => {
       likedByMe = article.likes.some((id) => id.toString() === req.user._id.toString());
     }
 
-    const comments = await Comment.find({ article: req.params.id, parent: null, isDeleted: false, isHidden: false })
+    const comments = await Comment.find({ article: articleId, parent: null, isDeleted: false, isHidden: false })
       .populate('author', 'name role avatar')
       .populate({
         path: 'replies',

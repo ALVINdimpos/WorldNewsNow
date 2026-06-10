@@ -65,7 +65,8 @@ export function SEO({ article, page = 'home', category, canonical }) {
     const title        = truncate(article.title, 110);
     const description  = truncate(article.excerpt || plainContent, 160);
     const image        = article.coverImage || DEFAULT_IMAGE;
-    const url          = `${SITE_URL}/?article=${article.id}`;
+    const slug         = article.slug || article.id;
+    const url          = `${SITE_URL}/article/${slug}`;
     const authorName   = article.author?.name || SITE_NAME;
     const publishedAt  = article.publishedAt || new Date().toISOString();
     const keywords     = [
@@ -112,7 +113,7 @@ export function SEO({ article, page = 'home', category, canonical }) {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home',               item: SITE_URL },
-        { '@type': 'ListItem', position: 2, name: article.category,     item: `${SITE_URL}/?category=${article.category}` },
+        { '@type': 'ListItem', position: 2, name: article.category,     item: `${SITE_URL}/category/${article.category.toLowerCase()}` },
         { '@type': 'ListItem', position: 3, name: title,                item: url },
       ],
     };
@@ -192,10 +193,30 @@ export function SEO({ article, page = 'home', category, canonical }) {
       description: 'Join the PRIMEWORLDNEWS team. We\'re a small, independent newsroom hiring carefully. Explore journalism and editorial career opportunities.',
       url:         `${SITE_URL}/careers`,
     },
+    privacy: {
+      title:       `Privacy Policy — ${SITE_NAME}`,
+      description: 'How PRIMEWORLDNEWS collects, uses, and protects your personal information.',
+      url:         `${SITE_URL}/privacy`,
+    },
+    terms: {
+      title:       `Terms of Use — ${SITE_NAME}`,
+      description: 'Terms governing use of PRIMEWORLDNEWS content and services.',
+      url:         `${SITE_URL}/terms`,
+    },
+    contact: {
+      title:       `Contact Us — ${SITE_NAME}`,
+      description: 'Contact the PRIMEWORLDNEWS editorial team for tips, corrections, and inquiries.',
+      url:         `${SITE_URL}/contact`,
+    },
+    editorial: {
+      title:       `Editorial Standards — ${SITE_NAME}`,
+      description: 'PRIMEWORLDNEWS editorial standards for accuracy, independence, and ethical journalism.',
+      url:         `${SITE_URL}/editorial`,
+    },
     category: {
       title:       `${category} News — ${SITE_NAME}`,
       description: `The latest ${category?.toLowerCase()} news from PRIMEWORLDNEWS. Independent reporting on the stories that matter.`,
-      url:         `${SITE_URL}/?category=${category}`,
+      url:         `${SITE_URL}/category/${category?.toLowerCase()}`,
     },
   };
 

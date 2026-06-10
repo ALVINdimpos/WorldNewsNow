@@ -6,4 +6,4 @@ Disallow: /journalist-dashboard
 Disallow: /api/
 
 # Sitemap location
-Sitemap: https://worldnewsnow.vercel.app/sitemap.xml
+Sitemap: https://www.primeworld.news/sitemap.xml

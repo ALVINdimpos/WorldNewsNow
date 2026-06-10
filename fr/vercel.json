@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/sitemap.xml", "destination": "https://worldnewsnow.onrender.com/sitemap.xml" },
+    { "source": "/robots.txt", "destination": "https://worldnewsnow.onrender.com/robots.txt" },
+    { "source": "/rss", "destination": "https://worldnewsnow.onrender.com/rss" },
+    { "source": "/rss/:category", "destination": "https://worldnewsnow.onrender.com/rss/:category" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

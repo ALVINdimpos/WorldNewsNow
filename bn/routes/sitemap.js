@@ -17,6 +17,10 @@ const STATIC_PAGES = [
   { url: '/journalists', priority: '0.7', changefreq: 'weekly'  },
   { url: '/advertise',   priority: '0.5', changefreq: 'monthly' },
   { url: '/careers',     priority: '0.5', changefreq: 'monthly' },
+  { url: '/privacy',     priority: '0.4', changefreq: 'monthly' },
+  { url: '/terms',       priority: '0.4', changefreq: 'monthly' },
+  { url: '/contact',     priority: '0.5', changefreq: 'monthly' },
+  { url: '/editorial',   priority: '0.6', changefreq: 'monthly' },
 ];
 
 // GET /sitemap.xml
